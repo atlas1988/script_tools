@@ -6,6 +6,9 @@ bat    ----bat code & tools
 
 运行脚本
 ssh-key.sh
+ssh-keygen -t rsa
+sudo cp ~/.ssh/id_rsa.pub id_rsa.pub
+vi id_rsa.pub
 一直回车，生成sshkey
 将sshkey 设置到对应的帐号
 打开githhu 个人设置
@@ -21,3 +24,5 @@ git commit -m
 git push
 
 
+content
+shell/android_env_setup --android开发环境设置（编译环境 repo vim 远程连接 adb 设置）

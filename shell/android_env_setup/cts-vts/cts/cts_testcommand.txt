@@ -1,0 +1,23 @@
+单项
+run cts -m CtsCameraTestCases -t android.hardware.camera2.cts.AllocationTest#testAllocationFromCameraFlexibleYuv --skip-preconditions
+run cts -m CtsHardwareTestCases -t android.hardware.cts.SingleSensorTests#testAccelerometer_10hz --skip-preconditions
+
+跑类的命令
+run cts -m CtsCameraTestCases -t android.hardware.camera2.cts.AllocationTest  --skip-preconditions
+
+
+run cts -m CtsSensorTestCase -t android.hardware.cts.SensorBatchingTests#testAccelerometer_fastest_batching --skip-preconditions
+
+run cts -m CtsSensorTestCase -t android.hardware.cts.SensorBatchingTests#testAccelerometer_fastest_flush --skip-preconditions
+
+CtsSensorTestCases android.hardware.cts.SingleSensorTests#testAccelerometer_faste
+run cts -m CtsSensorTestCase -t android.hardware.cts.SingleSensorTests#testAccelerometer_fastest --skip-preconditions
+
+CtsSensorTestCases--android.hardware.cts.SensorTest
+run cts -m CtsSensorTestCase -t android.hardware.cts.SensorTest#testSensorTimeStamps --skip-preconditions
+
+run cts -m CtsSensorTestCase -t  android.hardware.cts.SensorBatchingTests#testAccelerometer_50hz_batching --skip-preconditions
+
+run cts -m CtsSensorTestCase -t   --skip-preconditions
+
+run cts -m CtsSensorTestCase -t  android.hardware.cts.SensorBatchingTests#testAccelerometer_50hz_flush  --skip-preconditions

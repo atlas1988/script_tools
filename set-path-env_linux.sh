@@ -9,5 +9,5 @@ SCP=$temp_path
 echo "export variable SCP for current terminal"
 export SCP
 echo "Set the startup environment variable SCP."
-sudo sh -c 'echo "##setting the script_tools path of atlas" >> /etc/profile'
-sudo sh -c "echo \"export SCP=$SCP\" >> /etc/profile"
+sh -c 'echo "##setting the script_tools path of atlas" >> ~/.bashrc'
+sh -c "echo \"export SCP=$SCP\" >> ~/.bashrc"

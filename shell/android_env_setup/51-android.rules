@@ -1,0 +1,45 @@
+# adb protocol on passion (Nexus One)
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4e12", MODE="0600", OWNER="hly"
+# fastboot protocol on passion (Nexus One)
+SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", ATTR{idProduct}=="0fff", MODE="0600", OWNER="hly"
+# adb protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4e22", MODE="0600", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4e20", MODE="0600", OWNER="hly"
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="d00d", MODE="0600", OWNER="hly"
+
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="9018", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="a502", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1f53", ATTR{idProduct}=="a024", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", ATTR{idProduct}=="0c03", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="0bb4", ATTR{idProduct}=="0001", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="a503", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="a501", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="a504", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", ATTR{idProduct}=="6877", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="d00d", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="9018", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1f53", ATTR{idProduct}=="a014", MODE="0777", OWNER="hly"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="1004", ATTR{idProduct}=="618e", MODE="0777", OWNER="l"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="deed", MODE="0777", OWNER="l"
+# fastboot protocol on crespo (Nexus S)
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="a505", MODE="0777", OWNER="l"
+
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="a505", MODE="0777", OWNER="l"
+
+SUBSYSTEM=="usb", ATTR{idVendor}=="05c6", ATTR{idProduct}=="9091", MODE="0777", OWNER="l"
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="4ee7", MODE="0777", OWNER="l"

@@ -56,7 +56,9 @@ dir /a /b %DEFAULT_PATH%|findstr .* >nul||rmdir /q /s %DEFAULT_PATH%
 start getSensorHubInfo.bat ----重新大可以一个终端执行  
 ：：adb 命令搜索对应文件将结果赋值给变量 --- UpdateSensor_conf.bat  
 for /f "delims=" %%i in ( 'adb shell find /system -name sensor_def_qcomdev.conf ') do set SENSOR_PATH_InPhone=%%i   
-::echo %SENSOR_PATH_InPhone%  
-
+::echo %SENSOR_PATH_InPhone% 
+：：复制文件   
+xcopy *.cpp *.cpptxt  
+xcopy *.cpptxt *.cpp
 
 

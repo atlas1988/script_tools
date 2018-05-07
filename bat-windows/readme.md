@@ -6,6 +6,8 @@ BeyondCompare.bat --- 删除验证证书 规避BeyondCompare证书问题
 adbserver.bat ---- adb server重启  
 adbroot.bat ---- 获取adb root 权限 &remount  
 poweroff.bat ----  adb 关机手机  
+adbtcp.bat ---- 设置通过wifi链接adb  
+adbprintk.bat ---- 修改printk等级  
 charge_poweroff.bat ---- adb 修改设置高通手机关机充电  
 adblogkit.bat ---- 读取高通平台logkit保存的log 按时间保存到指定目录  
 push_trx01_kl.bat ---- push 按键kl文件到指定目录 kaios系统  

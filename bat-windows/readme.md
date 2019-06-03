@@ -6,6 +6,8 @@ BeyondCompare.bat --- 删除验证证书 规避BeyondCompare证书问题
 adbserver.bat ---- adb server重启  
 adbroot.bat ---- 获取adb root 权限 &remount  
 poweroff.bat ----  adb 关机手机  
+adbtcp.bat ---- 设置通过wifi链接adb  
+adbprintk.bat ---- 修改printk等级  
 charge_poweroff.bat ---- adb 修改设置高通手机关机充电  
 adblogkit.bat ---- 读取高通平台logkit保存的log 按时间保存到指定目录  
 push_trx01_kl.bat ---- push 按键kl文件到指定目录 kaios系统  
@@ -56,7 +58,9 @@ dir /a /b %DEFAULT_PATH%|findstr .* >nul||rmdir /q /s %DEFAULT_PATH%
 start getSensorHubInfo.bat ----重新大可以一个终端执行  
 ：：adb 命令搜索对应文件将结果赋值给变量 --- UpdateSensor_conf.bat  
 for /f "delims=" %%i in ( 'adb shell find /system -name sensor_def_qcomdev.conf ') do set SENSOR_PATH_InPhone=%%i   
-::echo %SENSOR_PATH_InPhone%  
-
+::echo %SENSOR_PATH_InPhone% 
+：：复制文件   
+xcopy *.cpp *.cpptxt  
+xcopy *.cpptxt *.cpp
 
 

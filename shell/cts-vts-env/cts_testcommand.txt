@@ -1,0 +1,6 @@
+单项
+run cts -m CtsCameraTestCases -t android.hardware.camera2.cts.AllocationTest#testAllocationFromCameraFlexibleYuv --skip-preconditions
+
+
+跑类的命令
+run cts -m CtsCameraTestCases -t android.hardware.camera2.cts.AllocationTest  --skip-preconditions

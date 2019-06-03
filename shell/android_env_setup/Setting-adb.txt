@@ -1,0 +1,29 @@
+7、设置常用usb端口
+    将51-android.rules文件拷贝到/etc/udev/rules.d/目录下，这个文件是在连接真机调试时需要用到的一些usb端口配置。如果执行adb shell时提示以下错误：
+Error: insufficient permissions for device
+那么只需要在51-android.rules文件中添加新的端口即可，首先在命令行中执行lsusb命令，如下：
+~$ lsusb
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 003 Device 002: ID 192f:0616 Avago Technologies, Pte.
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 147e:1002 Upek
+Bus 001 Device 004: ID 5986:02d2 Acer, Inc
+Bus 002 Device 004: ID 18d1:d002 Google Inc.
+然后打开51-android.rules文件，在末尾处添加如下语句：
+SUBSYSTEM=="usb", ATTR{idVendor}=="18d1", ATTR{idProduct}=="d002", MODE="0777", OWNER="l"
+保存并关闭，重新拔插usb即可。
+
+3、安装SDK
+    右键点击android-sdk-linux.zip，选择“提取到此处”即可。
+    4、设置环境变量
+    安装JDK和SDK完成后，打开path.txt，然后在命令行中输入如下指令来配置环境变量
+sudo gedit /etc/profile
+将path.txt中的代码全部复制到打开的profile文件最末端，注意将其中的xxx修改为你的Ubuntu登陆名。
+
+
+****注意修改 SDK platform-tools 中appt 的权限
+						对应cts测试包中的 tools 中的 cts-tradefed

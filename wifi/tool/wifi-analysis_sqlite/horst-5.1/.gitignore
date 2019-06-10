@@ -1,0 +1,7 @@
+horst
+*.o
+.buildflags
+.cproject
+.objdeps.mk
+.project
+*.kdev4

@@ -1,0 +1,260 @@
+diff --git a/include/hardware/alcohol.h b/include/hardware/alcohol.h
+new file mode 100755
+index 0000000..094162e
+--- /dev/null
++++ b/include/hardware/alcohol.h
+@@ -0,0 +1,31 @@
++#ifndef _ANDROID_ALCOHOL_INTERFACE_H_
++#define _ANDROID_ALCOHOL_INTERFACE_H_
++
++
++// 定义模块ID
++//#define ALCOHOL_HARDWARE_MODULE_ID "alcohol"
++
++__BEGIN_DECLS  
++  
++/*定义模块ID*/  
++#define ALCOHOL_HARDWARE_MODULE_ID "alcohol"  
++#define ALCOHOL_API_VERSION HARDWARE_MODULE_API_VERSION(1,0)
++
++/*硬件模块结构体*/  
++struct alcohol_module_t {  
++    struct hw_module_t common;  
++};  
++  
++/*硬件接口结构体*/  
++struct alcohol_device_t {  
++    struct hw_device_t common;  
++    int fd;  
++    int (*set_val)(struct alcohol_device_t* dev, int val);  
++    int (*get_val)(struct alcohol_device_t* dev, float* val);
++	int (*enable)(struct alcohol_device_t* dev);
++	int (*disable)(struct alcohol_device_t* dev);
++};  
++  
++__END_DECLS  
++
++#endif //_ANDROID_ALCOHOL_INTERFACE_H_
+\ No newline at end of file
+diff --git a/modules/alcohol/Android.bp b/modules/alcohol/Android.bp
+new file mode 100755
+index 0000000..dd8a9c9
+--- /dev/null
++++ b/modules/alcohol/Android.bp
+@@ -0,0 +1,26 @@
++// Copyright (C) 2012 The Android Open Source Project
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//      http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++cc_library_shared {
++    name: "alcohol.default",
++
++    // HAL module implementation stored in
++    // hw/<VIBRATOR_HARDWARE_MODULE_ID>.default.so
++    relative_install_path: "hw",
++    proprietary: true,
++    header_libs: ["libhardware_headers"],
++    srcs: ["alcohol.c"],
++    cflags: ["-Wall", "-Werror"],
++    shared_libs: ["liblog"],
++}
+diff --git a/modules/alcohol/alcohol.c b/modules/alcohol/alcohol.c
+new file mode 100755
+index 0000000..9080dfb
+--- /dev/null
++++ b/modules/alcohol/alcohol.c
+@@ -0,0 +1,184 @@
++/*
++ * Copyright (C) 2013 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++#include <hardware/hardware.h>
++#include <hardware/alcohol.h>
++
++#define LOG_TAG "alcoholStub"  
++  
++#include <hardware/hardware.h>  
++#include <hardware/alcohol.h>  
++#include <fcntl.h>  
++#include <errno.h>  
++//#include <cutils/log.h>  
++#include <cutils/atomic.h>  
++#include <malloc.h>
++#include <math.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <log/log.h>
++
++//#define DEVICE_NAME "/sys/class/alcohol_cls/alcohol/alcohol_val"
++#define DEVICE_NAME "/dev/mp3"
++#define DEVICE_ENABLE "/sys/class/alcohol_cls/alcohol/enable"
++#define ENABLE_STR_LEN 4
++#define ALCOHOL_FACTOR (1.0f)
++#define MODULE_NAME "alcohol"  
++#define MODULE_AUTHOR "atlas_li@126.com"  
++  
++/*设备打开和关闭接口*/  
++static int alcohol_device_open(const struct hw_module_t* module, const char* name, struct hw_device_t** device);  
++static int alcohol_device_close(struct hw_device_t* device);  
++  
++/*设备访问接口*/  
++static int alcohol_set_val(struct alcohol_device_t* dev, int val);  
++static int alcohol_get_val(struct alcohol_device_t* dev, float* val);  
++static int alcohol_enable(struct alcohol_device_t* dev);
++static int alcohol_disable(struct alcohol_device_t* dev);
++/*模块方法表*/  
++static struct hw_module_methods_t alcohol_module_methods = {  
++    .open = alcohol_device_open  
++};  
++  
++/*模块实例变量*/  
++struct alcohol_module_t HAL_MODULE_INFO_SYM = {
++    .common={.tag = HARDWARE_MODULE_TAG,
++    .module_api_version = ALCOHOL_API_VERSION,
++    .hal_api_version = HARDWARE_HAL_API_VERSION,
++    .id = ALCOHOL_HARDWARE_MODULE_ID,
++    .name = "Default alcohol HAL",
++    .author = MODULE_AUTHOR,
++    .methods = &alcohol_module_methods,
++	}
++};
++static int alcohol_device_open(const struct hw_module_t* module, const char* id __unused, struct hw_device_t** device) {  
++    struct alcohol_device_t* dev;dev = (struct alcohol_device_t*)malloc(sizeof(struct alcohol_device_t));  
++      
++    if(!dev) {  
++        ALOGE("alcohol Stub: failed to alloc space");  
++        return -EFAULT;  
++    }  
++  
++    memset(dev, 0, sizeof(struct alcohol_device_t));  
++    dev->common.tag = HARDWARE_DEVICE_TAG;  
++    dev->common.version = 0;  
++    dev->common.module = (hw_module_t*)module;  
++    dev->common.close = alcohol_device_close;  
++    dev->set_val = alcohol_set_val;
++	dev->get_val = alcohol_get_val;
++	dev->enable = alcohol_enable;
++	dev->disable = alcohol_disable;
++  
++    if((dev->fd = open(DEVICE_NAME, O_RDWR)) == -1) {  
++        ALOGE("alcohol Stub: failed to open /dev/alcohol -- %s.", strerror(errno));free(dev);  
++        return -EFAULT;  
++    }  
++  
++    *device = &(dev->common);  
++    ALOGI("alcohol Stub: open /dev/alcohol successfully.");  
++  
++    return 0;  
++}  
++ 
++static int alcohol_device_close(struct hw_device_t* device) {  
++    struct alcohol_device_t* alcohol_device = (struct alcohol_device_t*)device;  
++  
++    if(alcohol_device) {  
++        close(alcohol_device->fd);  
++        free(alcohol_device);  
++    }  
++    ALOGI("alcohol Stub:alcohol_device_close successfully.");
++    return 0;  
++}  
++  
++static int alcohol_set_val(struct alcohol_device_t* dev, int val) {  
++    ALOGI("alcohol Stub: set value %d to device.", val);  
++  
++    write(dev->fd, &val, sizeof(val));  
++  
++    return 0;  
++}  
++  
++static int alcohol_get_val(struct alcohol_device_t* dev, float* val) {
++	int ret = 0,data = 0;
++    if(!val) {  
++        ALOGE("alcohol Stub: error val pointer");  
++        return -EFAULT;  
++    }  
++  
++    ret = read(dev->fd, &data, sizeof(data));  
++  	*val = data*ALCOHOL_FACTOR;
++    ALOGI("alcohol Stub: get value %f from device ret = %d", *val,ret);  
++  
++    return ret;  
++}  
++
++static int write_value(const char *file, const char *value)
++{
++    int to_write, written, ret, fd;
++
++    fd = TEMP_FAILURE_RETRY(open(file, O_WRONLY));
++    if (fd < 0) {
++        return -errno;
++    }
++
++    to_write = strlen(value) + 1;
++    written = TEMP_FAILURE_RETRY(write(fd, value, to_write));
++    if (written == -1) {
++        ret = -errno;
++    } else if (written != to_write) {
++        /* even though EAGAIN is an errno value that could be set
++           by write() in some cases, none of them apply here.  So, this return
++           value can be clearly identified when debugging and suggests the
++           caller that it may try to call vibrator_on() again */
++        ret = -EAGAIN;
++    } else {
++        ret = 0;
++    }
++
++    errno = 0;
++    close(fd);
++
++    return ret;
++}
++
++static int sendit(unsigned int enable)
++{
++    char value[ENABLE_STR_LEN]; /* large enough for millions of years */
++
++    snprintf(value, sizeof(value), "%u", enable);
++    return write_value(DEVICE_ENABLE, value);
++}
++
++
++static int alcohol_enable(struct alcohol_device_t* dev __unused) {  
++    ALOGI("alcohol Stub: alcohol_enable device.");  
++  
++  	/* constant on, up to maximum allowed time */
++    return sendit(1);;  
++}  
++static int alcohol_disable(struct alcohol_device_t* dev __unused) {  
++    ALOGI("alcohol Stub: alcohol_enable device.");  
++  
++    /* constant on, up to maximum allowed time */
++    return sendit(0);  
++}  
++
++
++
++
